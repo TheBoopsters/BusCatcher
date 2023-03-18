@@ -1,0 +1,12 @@
+Django
+
+djangorestframework
+markdown
+django-filter
+drf-nested-routers
+
+mysqlclient
+redis
+
+gunicorn
+uvicorn
