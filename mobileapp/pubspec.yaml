@@ -28,6 +28,12 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  google_maps_flutter: ^2.2.5
+  http: ^0.13.5
+  json_serializable: ^6.6.1
+  json_annotation: ^4.8.0
+  build_runner: ^2.3.3
+  provider: ^6.0.5
   flutter:
     sdk: flutter
 
