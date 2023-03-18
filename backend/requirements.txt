@@ -4,6 +4,7 @@ djangorestframework
 markdown
 django-filter
 drf-nested-routers
+djangorestframework-simplejwt
 
 mysqlclient
 redis
