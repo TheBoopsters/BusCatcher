@@ -1,5 +1,6 @@
 import 'package:bus_catcher/models/route_model.dart';
 import 'package:bus_catcher/models/stop_model.dart';
+import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:bus_catcher/providers/bus_provider.dart';
 import 'package:bus_catcher/widgets/stopBus_widget.dart';
 import 'package:flutter/material.dart';
@@ -58,39 +59,52 @@ class _InfoBusWidgetState extends State<InfoBusWidget> {
       position: const LatLng(30, 45),
     ),
   ];
+
+  getRouteId() {
+    return context.read<BusProvider>().getRouteId();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: MediaQuery.of(context).size.height / 3,
-        child: SingleChildScrollView(
-          physics: const ScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 3.5,
+    return SingleChildScrollView(
+      physics: const ScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+            onPressed: () {
+              context.read<BusProvider>().unselectBus();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 25,
             ),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      context.read<BusProvider>().unselectBus();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      size: 25,
-                    ),
-                  ),
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: route.length,
-                    itemBuilder: (context, index) {
-                      return StopBusWidget(stopModel: route[index]);
-                    },
-                  )
-                ]),
           ),
-        ));
+          FutureBuilder(
+              future: context.read<APIProvider>().getRoute(getRouteId()),
+              builder: (context, AsyncSnapshot<RouteModel> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+
+                return ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.listStop.length,
+                  itemBuilder: (context, index) {
+                    return StopBusWidget(
+                        stopModel: snapshot.data!.listStop[index]);
+                  },
+                );
+              }),
+        ],
+      ),
+    );
   }
 }

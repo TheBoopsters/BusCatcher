@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class BusProvider extends ChangeNotifier {
   bool _isSelected = false;
+  List<BusModel> listBus = [];
   BusModel? _busData;
 
   BusProvider();
@@ -29,5 +30,9 @@ class BusProvider extends ChangeNotifier {
 
   bool isSelected() {
     return _isSelected;
+  }
+
+  int getRouteId() {
+    return _busData!.routeId;
   }
 }

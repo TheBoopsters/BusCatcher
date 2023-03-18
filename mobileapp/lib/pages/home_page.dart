@@ -18,9 +18,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: getDrawer(context),
-      bottomSheet: BottomSheetBusWidget(),
-      body: SafeArea(child: MapWidget()),
-    );
+        drawer: getDrawer(context),
+        //bottomSheet: const SafeArea(child: BottomSheetBusWidget()),
+        body: SingleChildScrollView(
+          child: Column(
+            children: const [
+              MapWidget(),
+              BottomSheetBusWidget(),
+            ],
+          ),
+        )
+        //const SafeArea(child: MapWidget()),
+        );
   }
 }
