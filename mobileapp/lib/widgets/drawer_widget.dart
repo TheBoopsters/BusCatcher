@@ -1,5 +1,8 @@
+import 'package:bus_catcher/pages/login_page.dart';
+import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 getDrawer(context) {
   return Drawer(
@@ -23,17 +26,44 @@ getDrawer(context) {
             thickness: 1,
             color: Colors.black,
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.login),
-            title: const Text(
-              "Login",
-              style: TextStyle(
-                fontSize: 25,
-              ),
-              textAlign: TextAlign.start,
-            ),
-          )
+          Consumer<APIProvider>(
+            builder: (context, value, _) {
+              return !value.isLoggedIn()
+                  ? ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
+                      },
+                      leading: const Icon(Icons.login),
+                      title: const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    )
+                  : ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        context.read<APIProvider>().logout();
+                        ToastContext().init(context);
+                        Toast.show("Sucessfully logged out",
+                            gravity: Toast.bottom, duration: 4);
+                      },
+                      leading: const Icon(Icons.logout),
+                      title: const Text(
+                        "Logout",
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    );
+            },
+          ),
         ],
       ),
     ),

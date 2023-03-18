@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 class APIProvider extends ChangeNotifier {
   static String busListLink = r"https://buscatcher.tohka.us/api/buses/";
   static String routeListLink = r"https://buscatcher.tohka.us/api/routes/";
+  static String tokenLink = r"https://buscatcher.tohka.us/api/token/";
+  String? accessToken = null;
   Future<List<BusModel>> getBusList() async {
     Uri busListUri = Uri.parse(busListLink);
     List<BusModel> listBus = [];
@@ -27,5 +29,30 @@ class APIProvider extends ChangeNotifier {
     final httpPackageJson = json.decode(httpPackageInfo);
 
     return RouteModel.fromJson(json: httpPackageJson);
+  }
+
+  login(String userName, String password) async {
+    Uri currentTokenUri = Uri.parse(tokenLink);
+    http.Response httpResponse = await http.post(currentTokenUri,
+        body: {"username": userName, "password": password});
+    if (httpResponse.statusCode == 200) {
+      Map response = json.decode(httpResponse.body);
+      accessToken = response["access"];
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  logout() {
+    accessToken = null;
+  }
+
+  isLoggedIn() {
+    if (accessToken != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
