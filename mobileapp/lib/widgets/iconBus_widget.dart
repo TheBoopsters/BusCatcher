@@ -21,13 +21,16 @@ class _IconBusWidgetState extends State<IconBusWidget> {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.bus_alert,
+          children: [
+            const Image(
+              image: AssetImage('assets/iconBus_widget.png'),
+              width: 20,
+              height: 20,
+              fit: BoxFit.cover,
             ),
             Text(
-              "23",
-              style: TextStyle(
+              widget.number,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

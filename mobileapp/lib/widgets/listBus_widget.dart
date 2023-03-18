@@ -11,7 +11,7 @@ class ListBusWidget extends StatefulWidget {
 
 class _ListBusWidgetState extends State<ListBusWidget> {
   BusModel example =
-      BusModel(id: 0, name: "Testname", routeId: 0, number: "23AB");
+      BusModel(id: 0, name: "Testname", routeId: 0, number: "23B");
   @override
   Widget build(BuildContext context) {
     return SizedBox(

@@ -23,7 +23,7 @@ class _ItemBusWidgetState extends State<ItemBusWidget> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
         child: ListTile(
           onTap: () {
             context.read<BusProvider>().selectBus(widget.busData);

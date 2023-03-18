@@ -12,15 +12,22 @@ class StopBusWidget extends StatefulWidget {
 class _StopBusWidgetState extends State<StopBusWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {},
-      title: Row(children: [
-        const Icon(Icons.bus_alert, size: 25),
-        const SizedBox(
-          width: 15,
-        ),
-        Text(widget.stopModel.name),
-      ]),
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(
+        top: BorderSide(color: Theme.of(context).primaryColor, width: 0.5),
+        bottom: BorderSide(color: Theme.of(context).primaryColor, width: 0.5),
+      )),
+      child: ListTile(
+        onTap: () {},
+        title: Row(children: [
+          const Icon(Icons.bus_alert, size: 25),
+          const SizedBox(
+            width: 15,
+          ),
+          Text(widget.stopModel.name),
+        ]),
+      ),
     );
   }
 }
