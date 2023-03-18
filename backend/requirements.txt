@@ -6,6 +6,9 @@ django-filter
 drf-nested-routers
 djangorestframework-simplejwt
 
+pyyaml
+uritemplate
+
 mysqlclient
 redis
 

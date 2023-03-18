@@ -16,9 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from rest_framework.schemas import get_schema_view
 from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),
+    path('swagger-ui/', TemplateView.as_view(
+        template_name='swagger-ui.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='swagger-ui'),
+    path('openapi', get_schema_view(
+        title='BusCatcher',
+        description="BusCatcher is an API designed to keep track of the various buses scattered around Targu Mures.",
+        version="1.0.0"
+    ), name='openapi-schema'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
