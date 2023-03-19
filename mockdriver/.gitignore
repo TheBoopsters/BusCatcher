@@ -1,0 +1,4 @@
+/settings.json
+
+*.py[c|o]
+__pycache__

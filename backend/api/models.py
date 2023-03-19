@@ -22,7 +22,7 @@ class Stop(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['name'], name='unique_stop_name')
+            models.UniqueConstraint(fields=['route', 'name'], name='unique_stop_name')
         ]
 
 class Bus(models.Model):

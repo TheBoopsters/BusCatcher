@@ -9,6 +9,9 @@ djangorestframework-simplejwt
 pyyaml
 uritemplate
 
+googlemaps
+requests
+
 mysqlclient
 redis
 

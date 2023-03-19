@@ -35,6 +35,9 @@ DEBUG = (SECRET_KEY == __default_key) or __environ.get('FORCE_DEBUG', False)
 ALLOWED_HOSTS = __environ.get('HOSTS', [])
 CSRF_TRUSTED_ORIGINS = __environ.get('CSRF_TRUSTED_ORIGINS', [])
 
+# Google Maps
+GOOGLE_MAPS_KEY = __environ.get('GOOGLE_MAPS_KEY', '')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -150,7 +153,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redis
-REDIS_LOCATION = __environ.get('REDIS_LOCATION', '')
+REDIS_LOCATION = __environ.get('REDIS_LOCATION_SITE', '')
 
 CACHES = {
     'default': {
@@ -159,10 +162,17 @@ CACHES = {
     }
 }
 
+from rest_framework.authentication import SessionAuthentication 
+
+class ExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'buscatcher.settings.ExemptSessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }

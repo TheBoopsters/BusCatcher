@@ -25,7 +25,7 @@ class Config(object):
         
         self.secret_key = data['SECRET_KEY']
         self.port = data['WEBSOCKET_PORT']
-        self.redis_location = data['REDIS_LOCATION']
+        self.redis_location = data['REDIS_LOCATION_RUNTIME']
 
 async def send_all_buses(websocket):
     """
