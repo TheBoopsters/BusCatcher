@@ -15,7 +15,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:ui' as ui;
 
 class MapProvider extends ChangeNotifier {
-  final Set<Marker> markers = {};
+  final Map<MarkerId, Marker> markers = {};
   final Set<Polyline> polylines = {};
   final List<LatLng> polylinesCoordinates = [];
   final Map<int, LatLng> busPositions = {};
@@ -35,7 +35,7 @@ class MapProvider extends ChangeNotifier {
     markers.clear();
 
     for (StopModel stop in routeData.listStop) {
-      markers.add(Marker(
+      markers[MarkerId(stop.id.toString())] = (Marker(
           markerId: MarkerId(stop.id.toString()),
           position: stop.position,
           icon: BitmapDescriptor.fromBytes(markerIcon)));
@@ -100,16 +100,8 @@ class MapProvider extends ChangeNotifier {
             context.read<BusProvider>().selectBusById(webBusId);
           },
         );
-        markers.add(marker);
+        markers[MarkerId(markerId)] = marker;
         busPositions[webBusId] = marker.position;
-        notifyListeners();
-        await Future.delayed(const Duration(milliseconds: 1900));
-        markers.removeWhere((element) {
-          if (element.mapsId == MarkerId(markerId)) {
-            return true;
-          }
-          return false;
-        });
         notifyListeners();
       }
     });
@@ -157,7 +149,7 @@ class MapProvider extends ChangeNotifier {
   }
 
   highLightMarker(int stopId) {
-    for (var marker in markers) {
+    for (var marker in markers.values) {
       if (marker.markerId == MarkerId(stopId.toString())) {
         controller!
             .animateCamera(CameraUpdate.newLatLngZoom(marker.position, 20));

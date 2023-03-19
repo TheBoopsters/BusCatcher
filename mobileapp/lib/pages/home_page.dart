@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(),
         drawer: getDrawer(context),
         //bottomSheet: const SafeArea(child: BottomSheetBusWidget()),
         body: SingleChildScrollView(

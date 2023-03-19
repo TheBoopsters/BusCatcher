@@ -10,7 +10,7 @@ class LocationProvider with ChangeNotifier {
     //await Geolocator.openLocationSettings();
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.checkPermission();
+      permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         return Future.error("Location permissions are denied");
       }

@@ -88,12 +88,12 @@ class _MapWidgetState extends State<MapWidget> {
                           target: LatLng(position.latitude, position.longitude),
                         ),
                         onMapCreated: (controller) => _onMapCreate(controller),
-                        markers: value.markers,
+                        markers: value.markers.values.toSet(),
                         polylines: value.polylines,
                         myLocationButtonEnabled: true,
                         gestureRecognizers: {}..add(
-                            Factory<PanGestureRecognizer>(
-                                () => PanGestureRecognizer())),
+                            Factory<OneSequenceGestureRecognizer>(
+                                () => EagerGestureRecognizer())),
                       );
                     },
                   );
