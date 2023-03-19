@@ -1,5 +1,7 @@
 import 'package:bus_catcher/models/stop_model.dart';
+import 'package:bus_catcher/providers/map_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StopBusWidget extends StatefulWidget {
   final StopModel stopModel;
@@ -19,7 +21,9 @@ class _StopBusWidgetState extends State<StopBusWidget> {
         bottom: BorderSide(color: Theme.of(context).primaryColor, width: 0.5),
       )),
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          context.read<MapProvider>().highLightMarker(widget.stopModel.id);
+        },
         title: Row(children: [
           const Icon(Icons.bus_alert, size: 25),
           const SizedBox(

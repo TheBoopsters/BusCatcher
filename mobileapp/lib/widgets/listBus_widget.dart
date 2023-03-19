@@ -1,5 +1,6 @@
 import 'package:bus_catcher/models/bus_model.dart';
 import 'package:bus_catcher/providers/api_provider.dart';
+import 'package:bus_catcher/providers/bus_provider.dart';
 import 'package:bus_catcher/widgets/itemBus_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class _ListBusWidgetState extends State<ListBusWidget> {
         if (snapshot.data!.isEmpty) {
           return Container();
         }
+        context.read<BusProvider>().setBusList(snapshot.data!);
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
           itemCount: snapshot.data!.length,

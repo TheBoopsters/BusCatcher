@@ -5,11 +5,13 @@ import 'package:bus_catcher/models/bus_model.dart';
 import 'package:bus_catcher/models/route_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class APIProvider extends ChangeNotifier {
   static String busListLink = r"https://buscatcher.tohka.us/api/buses/";
   static String routeListLink = r"https://buscatcher.tohka.us/api/routes/";
   static String tokenLink = r"https://buscatcher.tohka.us/api/token/";
+  static String webSocketLink = r"wss://buscatcher.tohka.us/ws";
   String? accessToken = null;
   Future<List<BusModel>> getBusList() async {
     Uri busListUri = Uri.parse(busListLink);
@@ -54,5 +56,12 @@ class APIProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  WebSocketChannel connectToWebSocket() {
+    WebSocketChannel channel = WebSocketChannel.connect(
+      Uri.parse(webSocketLink),
+    );
+    return channel;
   }
 }

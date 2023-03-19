@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 class ItemBusWidget extends StatefulWidget {
   final BusModel busData;
-  const ItemBusWidget({Key? key, required this.busData}) : super(key: key);
+  bool? border = true;
+  ItemBusWidget({Key? key, required this.busData, this.border})
+      : super(key: key);
 
   @override
   State<ItemBusWidget> createState() => _ItemBusWidgetState();
@@ -15,12 +17,20 @@ class ItemBusWidget extends StatefulWidget {
 class _ItemBusWidgetState extends State<ItemBusWidget> {
   @override
   Widget build(BuildContext context) {
+    bool hasBorder = true;
+    if (widget.border != null) {
+      hasBorder = widget.border!;
+    }
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Theme.of(context).primaryColor, width: 0.5),
-          bottom: BorderSide(color: Theme.of(context).primaryColor, width: 0.5),
-        ),
+        border: hasBorder
+            ? Border(
+                top: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 0.5),
+                bottom: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 0.5),
+              )
+            : null,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),

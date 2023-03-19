@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   geolocator: ^9.0.2
+  flutter_polyline_points: ^1.0.0
+  web_socket_channel: ^2.3.0
   http: ^0.13.5
   toast: ^0.3.0
   google_maps_flutter: ^2.2.5

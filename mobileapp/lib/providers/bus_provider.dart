@@ -1,11 +1,11 @@
 import 'package:bus_catcher/models/bus_model.dart';
+import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:flutter/material.dart';
 
 class BusProvider extends ChangeNotifier {
   bool _isSelected = false;
-  List<BusModel> listBus = [];
   BusModel? _busData;
-
+  List<BusModel> busList = [];
   BusProvider();
 
   BusModel? getBus() {
@@ -34,5 +34,24 @@ class BusProvider extends ChangeNotifier {
 
   int getRouteId() {
     return _busData!.routeId;
+  }
+
+  int getBusId() {
+    return _busData!.id;
+  }
+
+  setBusList(busList) {
+    this.busList = busList;
+  }
+
+  selectBusById(int id) {
+    for (BusModel busData in busList) {
+      if (busData.id == id) {
+        _busData = busData;
+        _isSelected = true;
+        break;
+      }
+    }
+    notifyListeners();
   }
 }
