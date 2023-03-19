@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bus_catcher/models/stop_model.dart';
 import 'package:bus_catcher/providers/map_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ class _StopBusWidgetState extends State<StopBusWidget> {
           const SizedBox(
             width: 15,
           ),
-          Text(widget.stopModel.name),
+          Text(utf8.decode(widget.stopModel.name.codeUnits)),
         ]),
       ),
     );
