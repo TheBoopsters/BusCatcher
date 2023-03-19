@@ -63,7 +63,7 @@ class MapProvider extends ChangeNotifier {
     polylines.add(Polyline(
       width: 10,
       polylineId: const PolylineId('polyLine'),
-      color: const Color.fromRGBO(180, 1, 29, 100),
+      color: const Color.fromRGBO(184, 37, 54, 100),
       points: polylinesCoordinates,
     ));
   }
