@@ -27,7 +27,7 @@ class _MapWidgetState extends State<MapWidget> {
   _onMapCreate(GoogleMapController controller) {
     mapController = controller;
     context.read<MapProvider>().controller = controller;
-    context.read<MapProvider>().getBuses();
+    context.read<MapProvider>().getBuses(context);
   }
 
   setCamera() async {
@@ -90,9 +90,10 @@ class _MapWidgetState extends State<MapWidget> {
                         onMapCreated: (controller) => _onMapCreate(controller),
                         markers: value.markers,
                         polylines: value.polylines,
-                        gestureRecognizers: Set()
-                          ..add(Factory<PanGestureRecognizer>(
-                              () => PanGestureRecognizer())),
+                        myLocationButtonEnabled: true,
+                        gestureRecognizers: {}..add(
+                            Factory<PanGestureRecognizer>(
+                                () => PanGestureRecognizer())),
                       );
                     },
                   );

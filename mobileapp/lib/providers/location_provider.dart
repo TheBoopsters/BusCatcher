@@ -21,13 +21,13 @@ class LocationProvider with ChangeNotifier {
   }
 
   Future<Position> getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    await Geolocator.isLocationServiceEnabled();
 
     await getPermission();
     return await Geolocator.getCurrentPosition();
   }
 
   getLiveLocation() {
-    Geolocator.getPositionStream(locationSettings: locationSettings);
+    return Geolocator.getPositionStream(locationSettings: locationSettings);
   }
 }

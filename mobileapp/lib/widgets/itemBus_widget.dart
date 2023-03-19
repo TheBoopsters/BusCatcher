@@ -1,13 +1,13 @@
 import 'package:bus_catcher/models/bus_model.dart';
 import 'package:bus_catcher/providers/bus_provider.dart';
-import 'package:bus_catcher/widgets/iconBus_widget.dart';
+import 'package:bus_catcher/widgets/iconbus_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ItemBusWidget extends StatefulWidget {
   final BusModel busData;
-  bool? border = true;
-  ItemBusWidget({Key? key, required this.busData, this.border})
+  final bool border;
+  const ItemBusWidget({Key? key, required this.busData, required this.border})
       : super(key: key);
 
   @override
@@ -17,13 +17,9 @@ class ItemBusWidget extends StatefulWidget {
 class _ItemBusWidgetState extends State<ItemBusWidget> {
   @override
   Widget build(BuildContext context) {
-    bool hasBorder = true;
-    if (widget.border != null) {
-      hasBorder = widget.border!;
-    }
     return Container(
       decoration: BoxDecoration(
-        border: hasBorder
+        border: widget.border
             ? Border(
                 top: BorderSide(
                     color: Theme.of(context).primaryColor, width: 0.5),

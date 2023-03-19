@@ -1,13 +1,16 @@
-import 'package:bus_catcher/constants/constanst.dart';
-import 'package:bus_catcher/models/bus_model.dart';
+import 'dart:async';
+
 import 'package:bus_catcher/models/route_model.dart';
 import 'package:bus_catcher/models/stop_model.dart';
 import 'package:bus_catcher/providers/api_provider.dart';
+import 'package:bus_catcher/providers/bus_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:ui' as ui;
 
@@ -15,16 +18,20 @@ class MapProvider extends ChangeNotifier {
   final Set<Marker> markers = {};
   final Set<Polyline> polylines = {};
   final List<LatLng> polylinesCoordinates = [];
+  final Map<int, LatLng> busPositions = {};
   final PolylinePoints polylinePoints = PolylinePoints();
   int selectedBus = -1;
+  StreamSubscription<Position>? streamSubscription;
+  WebSocketChannel? webSocket;
   GoogleMapController? controller;
 
   int busId = -1;
-  getMarkers(int routeId) async {
+  getMarkers(int busId, int routeId) async {
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/busStation_marker.png', 95);
     RouteModel routeData = await APIProvider().getRoute(routeId);
-    LatLng position = const LatLng(0, 0);
+    LatLng? position;
+    LatLng? stopPosition;
     markers.clear();
 
     for (StopModel stop in routeData.listStop) {
@@ -32,10 +39,17 @@ class MapProvider extends ChangeNotifier {
           markerId: MarkerId(stop.id.toString()),
           position: stop.position,
           icon: BitmapDescriptor.fromBytes(markerIcon)));
-      position = stop.position;
+      stopPosition = stop.position;
+    }
+    if (!busPositions.containsKey(busId)) {
+      position = stopPosition;
+    } else {
+      position = busPositions[busId];
     }
     getPolyLines(routeData.polyLine);
-    controller!.animateCamera(CameraUpdate.newLatLng(position));
+    if (position != null) {
+      controller!.animateCamera(CameraUpdate.newLatLngZoom(position, 15));
+    }
     notifyListeners();
   }
 
@@ -48,7 +62,7 @@ class MapProvider extends ChangeNotifier {
 
     polylines.add(Polyline(
       width: 10,
-      polylineId: PolylineId('polyLine'),
+      polylineId: const PolylineId('polyLine'),
       color: const Color.fromRGBO(180, 1, 29, 100),
       points: polylinesCoordinates,
     ));
@@ -64,13 +78,12 @@ class MapProvider extends ChangeNotifier {
         .asUint8List();
   }
 
-  getBuses() async {
+  getBuses(BuildContext context) async {
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/bus_marker.png', 160);
     WebSocketChannel channel = APIProvider().connectToWebSocket();
     String markerId;
     channel.stream.listen((event) async {
-      print(event);
       String str = event;
       List<String> values = str.split(';');
       markerId = values[0] + values[1];
@@ -84,10 +97,11 @@ class MapProvider extends ChangeNotifier {
           ),
           icon: BitmapDescriptor.fromBytes(markerIcon),
           onTap: () {
-            selectedBus = webBusId;
+            context.read<BusProvider>().selectBusById(webBusId);
           },
         );
         markers.add(marker);
+        busPositions[webBusId] = marker.position;
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 1900));
         markers.removeWhere((element) {
@@ -101,14 +115,39 @@ class MapProvider extends ChangeNotifier {
     });
   }
 
+  sendLocation(Stream<Position> liveLocation, int busId, String accessToken) {
+    if (accessToken.isEmpty) {
+      return;
+    }
+    var webSocket = APIProvider().connectToWebSocket();
+    this.webSocket = webSocket;
+    streamSubscription = liveLocation.listen(
+      (event) {
+        webSocket.sink
+            .add(APIProvider.messageToWebSocket(event, busId, accessToken));
+      },
+      onDone: () {
+        webSocket.sink.close();
+      },
+    );
+  }
+
+  closeLiveLocation() async {
+    if (streamSubscription == null) {
+      return;
+    }
+    if (webSocket == null) {
+      return;
+    }
+    await streamSubscription!.cancel();
+  }
+
   setBusId(int id) {
     busId = id;
-    notifyListeners();
   }
 
   clearBusId() {
     busId = -1;
-    notifyListeners();
   }
 
   clearMarkers() {

@@ -32,7 +32,10 @@ class _ListBusWidgetState extends State<ListBusWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
-            return ItemBusWidget(busData: snapshot.data![index]);
+            return ItemBusWidget(
+              busData: snapshot.data![index],
+              border: true,
+            );
           },
         );
       },

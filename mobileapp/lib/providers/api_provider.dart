@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bus_catcher/models/bus_model.dart';
 import 'package:bus_catcher/models/route_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -12,7 +13,7 @@ class APIProvider extends ChangeNotifier {
   static String routeListLink = r"https://buscatcher.tohka.us/api/routes/";
   static String tokenLink = r"https://buscatcher.tohka.us/api/token/";
   static String webSocketLink = r"wss://buscatcher.tohka.us/ws";
-  String? accessToken = null;
+  String? accessToken;
   Future<List<BusModel>> getBusList() async {
     Uri busListUri = Uri.parse(busListLink);
     List<BusModel> listBus = [];
@@ -63,5 +64,16 @@ class APIProvider extends ChangeNotifier {
       Uri.parse(webSocketLink),
     );
     return channel;
+  }
+
+  getAccessToken() {
+    if (accessToken == null) {
+      return "";
+    }
+    return accessToken;
+  }
+
+  static messageToWebSocket(Position location, int busId, String accessToken) {
+    return "bus;$accessToken;$busId;${location.latitude};${location.longitude}";
   }
 }

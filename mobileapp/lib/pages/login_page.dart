@@ -1,6 +1,5 @@
 import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:bus_catcher/widgets/widget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';

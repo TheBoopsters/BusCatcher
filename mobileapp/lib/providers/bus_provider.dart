@@ -1,5 +1,4 @@
 import 'package:bus_catcher/models/bus_model.dart';
-import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:flutter/material.dart';
 
 class BusProvider extends ChangeNotifier {
