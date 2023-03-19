@@ -1,4 +1,5 @@
 import 'package:bus_catcher/providers/api_provider.dart';
+import 'package:bus_catcher/providers/map_provider.dart';
 import 'package:bus_catcher/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -120,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       await context.read<APIProvider>().login(userName, password).then((value) {
         ToastContext().init(context);
         if (value == true) {
+          context.read<MapProvider>().clearMarkers();
           Toast.show("You successfully logged in",
               gravity: Toast.bottom, duration: 4);
           Navigator.pushReplacement(context,
