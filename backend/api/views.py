@@ -3,6 +3,7 @@ from rest_framework import viewsets, views
 from .models import Bus, Route, Stop
 from .serializers import BusSerializer, RouteSerializer, RouteListSerializer, StopSerializer
 from .permissions import IsSuperUser, IsAnonymous
+from natsort import natsorted
 
 class NestedModelViewSet(viewsets.ModelViewSet):
     """
@@ -32,7 +33,7 @@ class BusViewSet(NestedModelViewSet):
     serializer_class = BusSerializer
 
     def get_queryset(self):
-        return Bus.objects.order_by('name')
+        return natsorted(Bus.objects.all(), key=lambda x: x.number)
 
 class RouteViewSet(NestedModelViewSet):
     """
