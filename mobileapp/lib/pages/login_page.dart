@@ -124,8 +124,12 @@ class _LoginPageState extends State<LoginPage> {
           context.read<MapProvider>().clearMarkers();
           Toast.show("You successfully logged in",
               gravity: Toast.bottom, duration: 4);
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomePage()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HomePage(
+                        wasPlayed: true,
+                      )));
         } else {
           setState(() {
             _isLoading = false;

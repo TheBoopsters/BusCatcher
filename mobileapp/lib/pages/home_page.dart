@@ -4,7 +4,8 @@ import 'package:bus_catcher/widgets/map_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final bool wasPlayed;
+  const HomePage({Key? key, required this.wasPlayed}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,7 +23,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration.zero, () => showAlert(context));
+    if (!widget.wasPlayed) {
+      Future.delayed(Duration.zero, () => showAlert(context));
+    }
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
