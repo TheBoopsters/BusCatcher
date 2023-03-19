@@ -1,6 +1,6 @@
 from urllib.parse import urljoin
 from pyproj import Geod
-import asyncio, builtins, json, math, logging
+import asyncio, builtins, json, math, logging, random
 import websockets, googlemaps, requests
 
 logger = logging.getLogger('mockdriver')
@@ -53,8 +53,12 @@ class Bus(object):
         for leg in legs:
             start_location = leg['start_location']
             end_location = leg['end_location']
+
+            if start_location == end_location:
+                continue
+
             distance = self.compute_distance_leg(start_location, end_location)
-            speed = 0.03 # km/h
+            speed = 0.01 # km/h
             duration = distance / speed
             updates = int(math.ceil(duration / UPDATE_FREQUENCY))
             extra_points = geoid.npts(start_location['lng'], start_location['lat'], end_location['lng'], end_location['lat'], updates)
@@ -62,9 +66,12 @@ class Bus(object):
             self.legs.append([start_location, end_location, distance, duration, extra_points])
             self.points.extend(extra_points)
         
+        # Remove duplicate points
         self.points = list(dict.fromkeys(self.points))
-        self.current_point = 0
-        self.direction = True
+
+        # Choose random point to begin from
+        self.current_point = random.randint(0, len(self.points) - 1)
+        self.direction = random.getrandbits(1) == 1
 
     def compute_distance(self, lat1, lng1, lat2, lng2):
         """
@@ -126,6 +133,10 @@ class Main(object):
         self.buses = []
 
         for bus in buses:
+            # TODO: allow the number "4" to be used
+            if bus['number'] == '4':
+                continue
+
             bus_id = bus['id']
             route_id = bus['route']['id']
 

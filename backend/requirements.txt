@@ -5,6 +5,7 @@ markdown
 django-filter
 drf-nested-routers
 djangorestframework-simplejwt
+natsort
 
 pyyaml
 uritemplate
