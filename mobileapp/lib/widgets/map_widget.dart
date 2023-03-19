@@ -57,7 +57,7 @@ class _MapWidgetState extends State<MapWidget> {
           ),
         ),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height / 1.45,
+          height: MediaQuery.of(context).size.height / 1.65,
           width: MediaQuery.of(context).size.width,
           child: Align(
             child: SafeArea(

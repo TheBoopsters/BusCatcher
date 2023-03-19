@@ -28,15 +28,58 @@ class _ListBusWidgetState extends State<ListBusWidget> {
           return Container();
         }
         context.read<BusProvider>().setBusList(snapshot.data!);
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            return ItemBusWidget(
-              busData: snapshot.data![index],
-              border: true,
-            );
-          },
+
+        return SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 8,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  "Favorites",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
+                shrinkWrap: true,
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return ItemBusWidget(
+                    busData: snapshot.data![index],
+                    border: true,
+                  );
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  "Bus Stations",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 3.5, vertical: 8),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return ItemBusWidget(
+                    busData: snapshot.data![index],
+                    border: true,
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );

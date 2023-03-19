@@ -55,9 +55,32 @@ class _InfoBusWidgetState extends State<InfoBusWidget> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 1.25,
-                child: ItemBusWidget(
-                  busData: context.read<BusProvider>().getBus()!,
-                  border: false,
+                child: Column(
+                  children: [
+                    ItemBusWidget(
+                      busData: context.read<BusProvider>().getBus()!,
+                      border: false,
+                    ),
+                    FutureBuilder(
+                      future: context
+                          .read<MapProvider>()
+                          .calculateDistanceFromBus(getBusId()),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container();
+                        }
+                        if (!snapshot.hasData) {
+                          return Container();
+                        }
+                        return Text(
+                          "${snapshot.data}",
+                          style: const TextStyle(),
+                          textAlign: TextAlign.center,
+                        );
+                      },
+                    )
+                  ],
                 ),
               ),
             ],

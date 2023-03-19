@@ -4,6 +4,7 @@ import 'package:bus_catcher/models/route_model.dart';
 import 'package:bus_catcher/models/stop_model.dart';
 import 'package:bus_catcher/providers/api_provider.dart';
 import 'package:bus_catcher/providers/bus_provider.dart';
+import 'package:bus_catcher/providers/location_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:ui' as ui;
+import 'dart:math' as math;
 
 class MapProvider extends ChangeNotifier {
   final Map<MarkerId, Marker> markers = {};
@@ -157,5 +159,37 @@ class MapProvider extends ChangeNotifier {
         break;
       }
     }
+  }
+
+  calculateDistanceFromBus(int busId) async {
+    double distanceToTimeNumber = 0.221;
+    Position currentPosition = await LocationProvider().getCurrentLocation();
+    double distance = getDistanceFromLatLonInKm(
+        currentPosition.latitude,
+        currentPosition.longitude,
+        busPositions[busId]!.latitude,
+        busPositions[busId]!.longitude);
+    distance = distance.ceilToDouble();
+    int time = (distance / distanceToTimeNumber).ceil();
+    return "$distance km / $time minutes";
+  }
+
+  double getDistanceFromLatLonInKm(
+      double lat1, double lon1, double lat2, double lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(deg2rad(lat1)) *
+            math.cos(deg2rad(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+    var c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  double deg2rad(deg) {
+    return deg * (math.pi / 180);
   }
 }
