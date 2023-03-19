@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Bus Catcher',
       theme: ThemeData(
         primaryColor: const Color.fromRGBO(17, 17, 17, 1),
