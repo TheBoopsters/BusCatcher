@@ -147,6 +147,7 @@ class MapProvider extends ChangeNotifier {
   clearMarkers() {
     markers.clear();
     polylines.clear();
+    polylinesCoordinates.clear();
     notifyListeners();
   }
 
